@@ -1,18 +1,6 @@
-<template>
-  <div class="input-wrap" :class="{ 'input-err': todoState.invalid }">
-    <input
-      type="text"
-      placeholder="What needs to be done?"
-      v-model="todoState.todo"
-      @keyup.enter="createTodo"
-    />
-    <button @click="createTodo()">Create</button>
-  </div>
-  <p class="err-msg" v-if="todoState.invalid">{{ todoState.errorMsg }}</p>
-</template>
-
 <script setup>
 import { ref, defineEmits, reactive } from "vue";
+import TodoButton from "./TodoButton.vue";
 const todoState = reactive({
   todo: "",
   invalid: null,
@@ -31,6 +19,19 @@ const createTodo = () => {
   todoState.errorMsg = "Todo cannot be empty";
 };
 </script>
+
+<template>
+  <div class="input-wrap" :class="{ 'input-err': todoState.invalid }">
+    <input
+      type="text"
+      placeholder="What needs to be done?"
+      v-model="todoState.todo"
+      @keyup.enter="createTodo"
+    />
+    <TodoButton @click="createTodo()" />
+  </div>
+  <p class="err-msg" v-if="todoState.invalid">{{ todoState.errorMsg }}</p>
+</template>
 
 <style lang="scss" scoped>
 .input-wrap {
@@ -55,11 +56,6 @@ const createTodo = () => {
     &:focus {
       outline: none;
     }
-  }
-
-  button {
-    padding: 8px 16px;
-    border: none;
   }
 }
 .err-msg {
