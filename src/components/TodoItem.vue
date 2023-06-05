@@ -1,5 +1,6 @@
 <script setup>
 import { Icon } from "@iconify/vue";
+import { defineProps, defineEmits } from "vue";
 const props = defineProps({
   todo: {
     type: Object,
@@ -10,7 +11,7 @@ const props = defineProps({
     required: true,
   },
 });
-defineEmits(["toggle-complete"]);
+defineEmits(["toggle-complete", "edit-todo", "update-todo", "delete-todo"]);
 </script>
 <template>
   <li>
@@ -20,7 +21,12 @@ defineEmits(["toggle-complete"]);
       @input="$emit('toggle-complete', index)"
     />
     <div class="todo">
-      <input v-if="todo.isEditing" type="text" :value="todo.todo" />
+      <input
+        v-if="todo.isEditing"
+        type="text"
+        :value="todo.todo"
+        @input="$emit('update-todo', $event.target.value, index)"
+      />
       <span v-else :class="{ 'todo-completed': todo.isCompleted }">{{
         todo.todo
       }}</span>
@@ -32,6 +38,7 @@ defineEmits(["toggle-complete"]);
         icon="ph:check-circle"
         color="#41b080"
         width="22"
+        @click="$emit('edit-todo', index)"
       />
       <Icon
         v-else
@@ -39,8 +46,15 @@ defineEmits(["toggle-complete"]);
         icon="ph:pencil-fill"
         color="#41b080"
         width="22"
+        @click="$emit('edit-todo', index)"
       />
-      <Icon class="icon" icon="ph:trash" color="#f95e5e" width="22" />
+      <Icon
+        class="icon"
+        icon="ph:trash"
+        color="#f95e5e"
+        width="22"
+        @click="$emit('delete-todo', todo.id)"
+      />
     </div>
   </li>
 </template>
